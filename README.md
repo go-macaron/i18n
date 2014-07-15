@@ -20,7 +20,7 @@ func main() {
 		Names:    []string{"English", "简体中文"},
 	}))
 	
-	m.Get("/", func(, locale i18n.Locale) string {
+	m.Get("/", func(locale i18n.Locale) string {
 		return "current language is" + locale.Lang
 	})
 
@@ -34,14 +34,14 @@ func main() {
 
 ```go
 // ...
-m.Use(i18n.I18nr(i18n.LocaleOptions{
-	Directory: "conf/locale", // Directory to load locale files.
-	Langs:    []string{"en-US", "zh-CN"}, // Langauges that will be supported, order is meaningful.
-	Names:    []string{"English", "简体中文"}, // Human friendly names corresponding to Langs list.
-	Format: "locale_%s.ini", // Locale file naming style.
-	Parameter: "lang", // Name of language parameter name in URL.
-	Redirect: false, // Redirect when user uses get parameter to specify language.
-	TmplName: "i18n", // Name that maps into template variable.
+m.Use(i18n.I18n(i18n.LocaleOptions{
+	Directory:	"conf/locale", // Directory to load locale files.
+	Langs:		[]string{"en-US", "zh-CN"}, // Langauges that will be supported, order is meaningful.
+	Names:		[]string{"English", "简体中文"}, // Human friendly names corresponding to Langs list.
+	Format:		"locale_%s.ini", // Locale file naming style.
+	Parameter:	"lang", // Name of language parameter name in URL.
+	Redirect:	false, // Redirect when user uses get parameter to specify language.
+	TmplName:	"i18n", // Name that maps into template variable.
 }))
 // ...
 ```
