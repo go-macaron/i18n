@@ -5,9 +5,14 @@ Middleware i18n is for [Macaron](https://github.com/Unknwon/macaron) app Interna
 
 [API Reference](https://gowalker.org/github.com/macaron-contrib/i18n)
 
+### Installation
+
+	go get github.com/macaron-contrib/i18n
+	
 ## Usage
 
 ```go
+// main.go
 import (
 	"github.com/Unknwon/macaron"
 	"github.com/macaron-contrib/i18n"
@@ -26,6 +31,21 @@ func main() {
 
 	m.Run()
 }
+```
+
+```html
+<!-- templates/hello.tmpl -->
+<h2>{{i18n.Tr "hello %s" "world"}}!</h2>
+```
+
+### Pongo2
+
+To use i18n feature in [pongo2](https://github.com/flosch/pongo2) with [middleware pongo2](https://github.com/macaron-contrib/pongo2):
+
+
+```html
+<!-- templates/hello.tmpl -->
+<h2>{{Tr(Lang,"hello %s","world")}}!</h2>
 ```
 
 ## Options

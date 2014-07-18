@@ -12,6 +12,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
+// Package i18n a middleware that provides app Internationalization and Localization of Macaron.
 package i18n
 
 import (
@@ -92,7 +93,6 @@ type LangType struct {
 // I18n is a middleware provides localization layer  to your application.
 // Paramenter langs must be in the form of "en-US", "zh-CN", etc.
 // Otherwise it may not recognize browser input.
-// You have to register Render middleware before this.
 func I18n(options ...LocaleOptions) macaron.Handler {
 	opt := prepareOptions(options)
 	initLocales(opt)
@@ -163,6 +163,8 @@ func I18n(options ...LocaleOptions) macaron.Handler {
 		locale := Locale{&i18n.Locale{lang}}
 		ctx.Map(locale)
 		ctx.Data[opt.TmplName] = locale
+		ctx.Data["Tr"] = i18n.Tr
+		ctx.Data["Lang"] = locale.Lang
 		ctx.Data["AllLangs"] = append([]LangType{curLang}, restLangs...)
 		ctx.Data["RestLangs"] = restLangs
 
