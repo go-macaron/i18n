@@ -1,7 +1,7 @@
 i18n
 ====
 
-Middleware i18n is for [Macaron](https://github.com/Unknwon/macaron) app Internationalization and Localization.
+Middleware i18n provides app Internationalization and Localization for [Macaron](https://github.com/Unknwon/macaron).
 
 [API Reference](https://gowalker.org/github.com/macaron-contrib/i18n)
 
