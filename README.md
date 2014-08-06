@@ -20,7 +20,7 @@ import (
 
 func main() {
   	m := macaron.Classic()
-  	m.Use(i18n.I18n(i18n.LocaleOptions{
+  	m.Use(i18n.I18n(i18n.Options{
 		Langs:    []string{"en-US", "zh-CN"},
 		Names:    []string{"English", "简体中文"},
 	}))
@@ -54,7 +54,7 @@ To use i18n feature in [pongo2](https://github.com/flosch/pongo2) with [middlewa
 
 ```go
 // ...
-m.Use(i18n.I18n(i18n.LocaleOptions{
+m.Use(i18n.I18n(i18n.Options{
 	Directory:	"conf/locale", // Directory to load locale files.
 	Langs:		[]string{"en-US", "zh-CN"}, // Langauges that will be supported, order is meaningful.
 	Names:		[]string{"English", "简体中文"}, // Human friendly names corresponding to Langs list.

@@ -25,7 +25,7 @@ import (
 )
 
 // Initialized language type list.
-func initLocales(opt LocaleOptions) {
+func initLocales(opt Options) {
 	for i, lang := range opt.Langs {
 		if err := i18n.SetMessageWithDesc(lang, opt.Names[i],
 			path.Join(opt.Directory, fmt.Sprintf(opt.Format, lang))); err != nil {
@@ -39,8 +39,8 @@ type Locale struct {
 	*i18n.Locale
 }
 
-// LocaleOptions represents a struct for specifying configuration options for the i18n middleware.
-type LocaleOptions struct {
+// Options represents a struct for specifying configuration options for the i18n middleware.
+type Options struct {
 	// Directory to load locale files. Default is "conf/locale"
 	Directory string
 	// Langauges that will be supported, order is meaningful.
@@ -57,8 +57,8 @@ type LocaleOptions struct {
 	TmplName string
 }
 
-func prepareOptions(options []LocaleOptions) LocaleOptions {
-	var opt LocaleOptions
+func prepareOptions(options []Options) Options {
+	var opt Options
 	if len(options) > 0 {
 		opt = options[0]
 	}
@@ -90,10 +90,10 @@ type LangType struct {
 	Lang, Name string
 }
 
-// I18n is a middleware provides localization layer  to your application.
+// I18n is a middleware provides localization layer for your application.
 // Paramenter langs must be in the form of "en-US", "zh-CN", etc.
 // Otherwise it may not recognize browser input.
-func I18n(options ...LocaleOptions) macaron.Handler {
+func I18n(options ...Options) macaron.Handler {
 	opt := prepareOptions(options)
 	initLocales(opt)
 	return func(ctx *macaron.Context) {
