@@ -41,6 +41,8 @@ type Locale struct {
 
 // Options represents a struct for specifying configuration options for the i18n middleware.
 type Options struct {
+	// Suburl of path. Default is empty.
+	SubURL string
 	// Directory to load locale files. Default is "conf/locale"
 	Directory string
 	// Langauges that will be supported, order is meaningful.
@@ -62,6 +64,8 @@ func prepareOptions(options []Options) Options {
 	if len(options) > 0 {
 		opt = options[0]
 	}
+
+	opt.SubURL = strings.TrimSuffix(opt.SubURL, "/")
 
 	// Defaults
 	if len(opt.Langs) == 0 {
@@ -169,7 +173,7 @@ func I18n(options ...Options) macaron.Handler {
 		ctx.Data["RestLangs"] = restLangs
 
 		if opt.Redirect && isNeedRedir {
-			ctx.Redirect(ctx.Req.RequestURI[:strings.Index(ctx.Req.RequestURI, "?")])
+			ctx.Redirect(opt.SubURL + ctx.Req.RequestURI[:strings.Index(ctx.Req.RequestURI, "?")])
 		}
 	}
 }
