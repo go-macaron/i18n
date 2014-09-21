@@ -149,7 +149,7 @@ func I18n(options ...Options) macaron.Handler {
 
 		// Save language information in cookies.
 		if !hasCookie {
-			ctx.SetCookie("lang", curLang.Lang, 1<<31-1, "/")
+			ctx.SetCookie("lang", curLang.Lang, 1<<31-1, "/" + strings.TrimPrefix(opt.SubURL, "/"))
 		}
 
 		restLangs := make([]LangType, 0, i18n.Count()-1)
