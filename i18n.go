@@ -40,7 +40,7 @@ func initLocales(opt Options) {
 
 // A Locale describles the information of localization.
 type Locale struct {
-	*i18n.Locale
+	i18n.Locale
 }
 
 // Options represents a struct for specifying configuration options for the i18n middleware.
@@ -168,7 +168,7 @@ func I18n(options ...Options) macaron.Handler {
 		}
 
 		// Set language properties.
-		locale := Locale{&i18n.Locale{lang}}
+		locale := Locale{i18n.Locale{lang}}
 		ctx.Map(locale)
 		ctx.Locale = locale
 		ctx.Data[opt.TmplName] = locale
