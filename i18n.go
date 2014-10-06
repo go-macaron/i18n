@@ -43,6 +43,11 @@ type Locale struct {
 	i18n.Locale
 }
 
+// Language returns language current locale represents.
+func (l Locale) Language() string {
+	return l.Lang
+}
+
 // Options represents a struct for specifying configuration options for the i18n middleware.
 type Options struct {
 	// Suburl of path. Default is empty.
