@@ -24,6 +24,10 @@ import (
 	"github.com/Unknwon/macaron"
 )
 
+func Version() string {
+	return "0.0.1"
+}
+
 // Initialized language type list.
 func initLocales(opt Options) {
 	for i, lang := range opt.Langs {
@@ -149,7 +153,7 @@ func I18n(options ...Options) macaron.Handler {
 
 		// Save language information in cookies.
 		if !hasCookie {
-			ctx.SetCookie("lang", curLang.Lang, 1<<31-1, "/" + strings.TrimPrefix(opt.SubURL, "/"))
+			ctx.SetCookie("lang", curLang.Lang, 1<<31-1, "/"+strings.TrimPrefix(opt.SubURL, "/"))
 		}
 
 		restLangs := make([]LangType, 0, i18n.Count()-1)
@@ -166,6 +170,7 @@ func I18n(options ...Options) macaron.Handler {
 		// Set language properties.
 		locale := Locale{&i18n.Locale{lang}}
 		ctx.Map(locale)
+		ctx.Locale = locale
 		ctx.Data[opt.TmplName] = locale
 		ctx.Data["Tr"] = i18n.Tr
 		ctx.Data["Lang"] = locale.Lang
