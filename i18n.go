@@ -20,19 +20,27 @@ import (
 	"path"
 	"strings"
 
+	"github.com/Unknwon/com"
 	"github.com/Unknwon/i18n"
 	"github.com/Unknwon/macaron"
 )
 
 func Version() string {
-	return "0.0.1"
+	return "0.0.2"
 }
 
 // Initialized language type list.
 func initLocales(opt Options) {
 	for i, lang := range opt.Langs {
+		fname := fmt.Sprintf(opt.Format, lang)
+		// Append custom locale file.
+		custom := []string{}
+		customPath := path.Join(opt.CustomDirectory, fname)
+		if com.IsFile(customPath) {
+			custom = append(custom, customPath)
+		}
 		if err := i18n.SetMessageWithDesc(lang, opt.Names[i],
-			path.Join(opt.Directory, fmt.Sprintf(opt.Format, lang))); err != nil {
+			path.Join(opt.Directory, fname), custom...); err != nil {
 			panic(fmt.Errorf("fail to set message file(%s): %v", lang, err))
 		}
 	}
@@ -54,6 +62,8 @@ type Options struct {
 	SubURL string
 	// Directory to load locale files. Default is "conf/locale"
 	Directory string
+	// Custom directory to overload locale files. Default is "custom/conf/locale"
+	CustomDirectory string
 	// Langauges that will be supported, order is meaningful.
 	Langs []string
 	// Human friendly names corresponding to Langs list.
@@ -85,6 +95,9 @@ func prepareOptions(options []Options) Options {
 
 	if len(opt.Directory) == 0 {
 		opt.Directory = "conf/locale"
+	}
+	if len(opt.CustomDirectory) == 0 {
+		opt.CustomDirectory = "custom/conf/locale"
 	}
 	if len(opt.Format) == 0 {
 		opt.Format = "locale_%s.ini"
