@@ -26,7 +26,7 @@ import (
 )
 
 func Version() string {
-	return "0.0.2"
+	return "0.0.3"
 }
 
 // Initialized language type list.
@@ -39,8 +39,8 @@ func initLocales(opt Options) {
 		if com.IsFile(customPath) {
 			custom = append(custom, customPath)
 		}
-		if err := i18n.SetMessageWithDesc(lang, opt.Names[i],
-			path.Join(opt.Directory, fname), custom...); err != nil {
+		err := i18n.SetMessageWithDesc(lang, opt.Names[i], path.Join(opt.Directory, fname), custom...)
+		if err != nil && err != i18n.ErrLangAlreadyExist {
 			panic(fmt.Errorf("fail to set message file(%s): %v", lang, err))
 		}
 	}
