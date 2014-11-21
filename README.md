@@ -1,4 +1,4 @@
-i18n
+i18n [![Build Status](https://drone.io/github.com/macaron-contrib/i18n/status.png)](https://drone.io/github.com/macaron-contrib/i18n/latest) [![](http://gocover.io/_badge/github.com/macaron-contrib/i18n)](http://gocover.io/github.com/macaron-contrib/i18n)
 ====
 
 Middleware i18n provides app Internationalization and Localization for [Macaron](https://github.com/Unknwon/macaron).
