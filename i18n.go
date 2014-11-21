@@ -123,10 +123,6 @@ func I18n(options ...Options) macaron.Handler {
 	opt := prepareOptions(options)
 	initLocales(opt)
 	return func(ctx *macaron.Context) {
-		if ctx.Data == nil {
-			panic("Render middleware is not registered")
-		}
-
 		isNeedRedir := false
 		hasCookie := false
 
