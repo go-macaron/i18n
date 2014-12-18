@@ -26,7 +26,7 @@ import (
 )
 
 func Version() string {
-	return "0.0.3"
+	return "0.0.4"
 }
 
 // Initialized language type list.
@@ -34,7 +34,7 @@ func initLocales(opt Options) {
 	for i, lang := range opt.Langs {
 		fname := fmt.Sprintf(opt.Format, lang)
 		// Append custom locale file.
-		custom := []string{}
+		custom := []interface{}{}
 		customPath := path.Join(opt.CustomDirectory, fname)
 		if com.IsFile(customPath) {
 			custom = append(custom, customPath)
