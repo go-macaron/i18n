@@ -25,7 +25,7 @@ import (
 
 func Test_Version(t *testing.T) {
 	Convey("Check package version", t, func() {
-		So(Version(), ShouldEqual, "0.0.3")
+		So(Version(), ShouldEqual, _VERSION)
 	})
 }
 

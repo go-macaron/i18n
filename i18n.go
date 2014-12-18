@@ -25,8 +25,10 @@ import (
 	"github.com/Unknwon/macaron"
 )
 
+const _VERSION = "0.0.4"
+
 func Version() string {
-	return "0.0.4"
+	return _VERSION
 }
 
 // Initialized language type list.
