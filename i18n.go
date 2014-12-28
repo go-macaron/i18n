@@ -25,7 +25,7 @@ import (
 	"github.com/Unknwon/macaron"
 )
 
-const _VERSION = "0.0.4"
+const _VERSION = "0.0.5"
 
 func Version() string {
 	return _VERSION
@@ -78,6 +78,8 @@ type Options struct {
 	Redirect bool
 	// Name that maps into template variable. Default is "i18n".
 	TmplName string
+	// Configuration section name. Default is "i18n".
+	Section string
 }
 
 func prepareOptions(options []Options) Options {
@@ -86,9 +88,19 @@ func prepareOptions(options []Options) Options {
 		opt = options[0]
 	}
 
+	if len(opt.Section) == 0 {
+		opt.Section = "i18n"
+	}
+	sec := macaron.Config().Section(opt.Section)
+
 	opt.SubURL = strings.TrimSuffix(opt.SubURL, "/")
 
-	// Defaults
+	if len(opt.Langs) == 0 {
+		opt.Langs = sec.Key("LANGS").Strings(",")
+	}
+	if len(opt.Names) == 0 {
+		opt.Names = sec.Key("NAMES").Strings(",")
+	}
 	if len(opt.Langs) == 0 {
 		panic("no language is specified")
 	} else if len(opt.Langs) != len(opt.Names) {
@@ -96,19 +108,22 @@ func prepareOptions(options []Options) Options {
 	}
 
 	if len(opt.Directory) == 0 {
-		opt.Directory = "conf/locale"
+		opt.Directory = sec.Key("DIRECTORY").MustString("conf/locale")
 	}
 	if len(opt.CustomDirectory) == 0 {
-		opt.CustomDirectory = "custom/conf/locale"
+		opt.CustomDirectory = sec.Key("CUSTOM_DIRECTORY").MustString("custom/conf/locale")
 	}
 	if len(opt.Format) == 0 {
-		opt.Format = "locale_%s.ini"
+		opt.Format = sec.Key("FORMAT").MustString("locale_%s.ini")
 	}
 	if len(opt.Parameter) == 0 {
-		opt.Parameter = "lang"
+		opt.Parameter = sec.Key("PARAMETER").MustString("lang")
+	}
+	if !opt.Redirect {
+		opt.Redirect = sec.Key("REDIRECT").MustBool()
 	}
 	if len(opt.TmplName) == 0 {
-		opt.TmplName = "i18n"
+		opt.TmplName = sec.Key("TMPL_NAME").MustString("i18n")
 	}
 
 	return opt
