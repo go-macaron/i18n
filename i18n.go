@@ -25,7 +25,7 @@ import (
 	"github.com/Unknwon/macaron"
 )
 
-const _VERSION = "0.0.5"
+const _VERSION = "0.0.6"
 
 func Version() string {
 	return _VERSION
@@ -205,6 +205,7 @@ func I18n(options ...Options) macaron.Handler {
 		ctx.Data[opt.TmplName] = locale
 		ctx.Data["Tr"] = i18n.Tr
 		ctx.Data["Lang"] = locale.Lang
+		ctx.Data["LangName"] = curLang.Name
 		ctx.Data["AllLangs"] = append([]LangType{curLang}, restLangs...)
 		ctx.Data["RestLangs"] = restLangs
 
