@@ -25,7 +25,7 @@ import (
 	"github.com/Unknwon/macaron"
 )
 
-const _VERSION = "0.0.6"
+const _VERSION = "0.0.7"
 
 func Version() string {
 	return _VERSION
@@ -41,7 +41,15 @@ func initLocales(opt Options) {
 		if com.IsFile(customPath) {
 			custom = append(custom, customPath)
 		}
-		err := i18n.SetMessageWithDesc(lang, opt.Names[i], path.Join(opt.Directory, fname), custom...)
+
+		var locale interface{}
+		if data, ok := opt.Files[fname]; ok {
+			locale = data
+		} else {
+			locale = path.Join(opt.Directory, fname)
+		}
+
+		err := i18n.SetMessageWithDesc(lang, opt.Names[i], locale, custom...)
 		if err != nil && err != i18n.ErrLangAlreadyExist {
 			panic(fmt.Errorf("fail to set message file(%s): %v", lang, err))
 		}
@@ -64,6 +72,8 @@ type Options struct {
 	SubURL string
 	// Directory to load locale files. Default is "conf/locale"
 	Directory string
+	// File stores actual data of locale files. Used for in-memory purpose.
+	Files map[string][]byte
 	// Custom directory to overload locale files. Default is "custom/conf/locale"
 	CustomDirectory string
 	// Langauges that will be supported, order is meaningful.
