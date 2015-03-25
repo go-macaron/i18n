@@ -67,6 +67,7 @@ func Test_I18n(t *testing.T) {
 		Convey("With correct options", func() {
 			m := macaron.New()
 			m.Use(I18n(Options{
+				Files: map[string][]byte{"locale_en-US.ini": []byte("")},
 				Langs: []string{"en-US"},
 				Names: []string{"English"},
 			}))
