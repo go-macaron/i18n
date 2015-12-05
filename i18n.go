@@ -25,7 +25,7 @@ import (
 	"gopkg.in/macaron.v1"
 )
 
-const _VERSION = "0.1.0"
+const _VERSION = "0.2.0"
 
 func Version() string {
 	return _VERSION
@@ -80,6 +80,8 @@ type Options struct {
 	Langs []string
 	// Human friendly names corresponding to Langs list.
 	Names []string
+	// Default language locale, leave empty to remain unset.
+	DefaultLang string
 	// Locale file naming style. Default is "locale_%s.ini".
 	Format string
 	// Name of language parameter name in URL. Default is "lang".
@@ -116,6 +118,7 @@ func prepareOptions(options []Options) Options {
 	} else if len(opt.Langs) != len(opt.Names) {
 		panic("length of langs is not same as length of names")
 	}
+	i18n.SetDefaultLang(opt.DefaultLang)
 
 	if len(opt.Directory) == 0 {
 		opt.Directory = sec.Key("DIRECTORY").MustString("conf/locale")
