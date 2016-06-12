@@ -22,18 +22,21 @@ import (
 
 	"github.com/Unknwon/com"
 	"github.com/Unknwon/i18n"
+	"golang.org/x/text/language"
 	"gopkg.in/macaron.v1"
 )
 
-const _VERSION = "0.2.0"
+const _VERSION = "0.3.0"
 
 func Version() string {
 	return _VERSION
 }
 
-// Initialized language type list.
-func initLocales(opt Options) {
+// initLocales initializes language type list and Accept-Language header matcher.
+func initLocales(opt Options) language.Matcher {
+	tags := make([]language.Tag, len(opt.Langs))
 	for i, lang := range opt.Langs {
+		tags[i] = language.Raw.Make(lang)
 		fname := fmt.Sprintf(opt.Format, lang)
 		// Append custom locale file.
 		custom := []interface{}{}
@@ -54,6 +57,7 @@ func initLocales(opt Options) {
 			panic(fmt.Errorf("fail to set message file(%s): %v", lang, err))
 		}
 	}
+	return language.NewMatcher(tags)
 }
 
 // A Locale describles the information of localization.
@@ -151,7 +155,7 @@ type LangType struct {
 // Otherwise it may not recognize browser input.
 func I18n(options ...Options) macaron.Handler {
 	opt := prepareOptions(options)
-	initLocales(opt)
+	m := initLocales(opt)
 	return func(ctx *macaron.Context) {
 		isNeedRedir := false
 		hasCookie := false
@@ -175,19 +179,11 @@ func I18n(options ...Options) macaron.Handler {
 		}
 
 		// 3. Get language information from 'Accept-Language'.
+		// The first element in the list is chosen to be the default language automatically.
 		if len(lang) == 0 {
-			al := ctx.Req.Header.Get("Accept-Language")
-			if len(al) > 4 {
-				al = al[:5] // Only compare first 5 letters.
-				if i18n.IsExist(al) {
-					lang = al
-				}
-			}
-		}
-
-		// 4. Default language is the first element in the list.
-		if len(lang) == 0 {
-			lang = i18n.GetLangByIndex(0)
+			tags, _, _ := language.ParseAcceptLanguage(ctx.Req.Header.Get("Accept-Language"))
+			tag, _, _ := m.Match(tags...)
+			lang = tag.String()
 			isNeedRedir = false
 		}
 

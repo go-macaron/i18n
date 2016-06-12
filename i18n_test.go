@@ -98,8 +98,25 @@ func Test_I18n(t *testing.T) {
 		Convey("Set by Accept-Language", func() {
 			m := macaron.New()
 			m.Use(I18n(Options{
-				Langs: []string{"en-US", "zh-CN"},
-				Names: []string{"English", "简体中文"},
+				Langs: []string{"en-US", "zh-CN", "it-IT"},
+				Names: []string{"English", "简体中文", "Italiano"},
+			}))
+			m.Get("/", func(l Locale) {
+				So(l.Language(), ShouldEqual, "it-IT")
+			})
+
+			resp := httptest.NewRecorder()
+			req, err := http.NewRequest("GET", "/", nil)
+			So(err, ShouldBeNil)
+			req.Header.Set("Accept-Language", "it")
+			m.ServeHTTP(resp, req)
+		})
+
+		Convey("Set to default language", func() {
+			m := macaron.New()
+			m.Use(I18n(Options{
+				Langs: []string{"en-US", "zh-CN", "it-IT"},
+				Names: []string{"English", "简体中文", "Italiano"},
 			}))
 			m.Get("/", func(l Locale) {
 				So(l.Language(), ShouldEqual, "en-US")
@@ -108,7 +125,7 @@ func Test_I18n(t *testing.T) {
 			resp := httptest.NewRecorder()
 			req, err := http.NewRequest("GET", "/", nil)
 			So(err, ShouldBeNil)
-			req.Header.Set("Accept-Language", "en-US")
+			req.Header.Set("Accept-Language", "ru")
 			m.ServeHTTP(resp, req)
 		})
 	})
