@@ -20,13 +20,13 @@ import (
 	"path"
 	"strings"
 
-	"github.com/Unknwon/com"
-	"github.com/Unknwon/i18n"
+	"github.com/unknwon/com"
+	"github.com/unknwon/i18n"
 	"golang.org/x/text/language"
 	"gopkg.in/macaron.v1"
 )
 
-const _VERSION = "0.4.0"
+const _VERSION = "0.4.1"
 
 func Version() string {
 	return _VERSION
