@@ -9,7 +9,7 @@ Middleware i18n provides app Internationalization and Localization for [Macaron]
 ## Getting Help
 
 - [API Reference](https://gowalker.org/github.com/go-macaron/i18n)
-- [Documentation](http://go-macaron.com/docs/middlewares/i18n)
+- [Documentation](https://go-macaron.com/middlewares/i18n)
 
 ## License
 
