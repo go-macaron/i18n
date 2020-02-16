@@ -19,6 +19,5 @@ install:
 script:
   - go test -v -race -coverprofile=coverage.txt -covermode=atomic
 
-# NOTE: Codecov is experiencing 503
-#after_success:
-#  - bash <(curl -s https://codecov.io/bash)
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
