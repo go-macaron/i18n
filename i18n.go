@@ -17,19 +17,23 @@ package i18n
 
 import (
 	"fmt"
+	"os"
 	"path"
 	"strings"
 
-	"github.com/unknwon/com"
 	"github.com/unknwon/i18n"
 	"golang.org/x/text/language"
 	"gopkg.in/macaron.v1"
 )
 
-const _VERSION = "0.4.1"
-
-func Version() string {
-	return _VERSION
+// isFile returns true if given path is a file,
+// or returns false when it's a directory or does not exist.
+func isFile(filePath string) bool {
+	f, e := os.Stat(filePath)
+	if e != nil {
+		return false
+	}
+	return !f.IsDir()
 }
 
 // initLocales initializes language type list and Accept-Language header matcher.
@@ -41,7 +45,7 @@ func initLocales(opt Options) language.Matcher {
 		// Append custom locale file.
 		custom := []interface{}{}
 		customPath := path.Join(opt.CustomDirectory, fname)
-		if com.IsFile(customPath) {
+		if isFile(customPath) {
 			custom = append(custom, customPath)
 		}
 
@@ -221,7 +225,7 @@ func I18n(options ...Options) macaron.Handler {
 		ctx.Data["RestLangs"] = restLangs
 
 		if opt.Redirect && isNeedRedir {
-			ctx.Redirect(opt.SubURL + ctx.Req.RequestURI[:strings.Index(ctx.Req.RequestURI, "?")])
+			ctx.Redirect(opt.SubURL + path.Clean(ctx.Req.RequestURI[:strings.Index(ctx.Req.RequestURI, "?")]))
 		}
 	}
 }
