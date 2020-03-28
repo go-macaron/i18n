@@ -18,6 +18,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -47,7 +48,11 @@ func TestI18n(t *testing.T) {
 
 	t.Run("invalid directory", func(t *testing.T) {
 		defer func() {
-			assert.Equal(t, errors.New("fail to set message file(en-US): open 404/locale_en-US.ini: no such file or directory"), recover())
+			if runtime.GOOS == "windows" {
+				assert.Equal(t, errors.New("fail to set message file(en-US): open 404/locale_en-US.ini: The system cannot find the path specified."), recover())
+			} else {
+				assert.Equal(t, errors.New("fail to set message file(en-US): open 404/locale_en-US.ini: no such file or directory"), recover())
+			}
 		}()
 
 		m := macaron.New()

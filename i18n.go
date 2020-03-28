@@ -214,7 +214,7 @@ func I18n(options ...Options) macaron.Handler {
 		}
 
 		// Set language properties.
-		locale := Locale{i18n.Locale{lang}}
+		locale := Locale{Locale: i18n.Locale{Lang: lang}}
 		ctx.Map(locale)
 		ctx.Locale = locale
 		ctx.Data[opt.TmplName] = locale
