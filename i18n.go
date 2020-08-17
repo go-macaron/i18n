@@ -102,6 +102,10 @@ type Options struct {
 	Section string
 	// Domain used for `lang` cookie. Default is ""
 	CookieDomain string
+	// Set the Secure flag on the `lang` cookie. Default is disabled.
+	Secure bool
+	// Set the HTTP Only flag on the `lang` cookie. Default is disabled.
+	CookieHttpOnly bool
 }
 
 func prepareOptions(options []Options) Options {
@@ -199,7 +203,7 @@ func I18n(options ...Options) macaron.Handler {
 
 		// Save language information in cookies.
 		if !hasCookie {
-			ctx.SetCookie("lang", curLang.Lang, 1<<31-1, "/"+strings.TrimPrefix(opt.SubURL, "/"), opt.CookieDomain)
+			ctx.SetCookie("lang", curLang.Lang, 1<<31-1, "/"+strings.TrimPrefix(opt.SubURL, "/"), opt.CookieDomain, opt.Secure, opt.CookieHttpOnly)
 		}
 
 		restLangs := make([]LangType, 0, i18n.Count()-1)
