@@ -17,6 +17,7 @@ package i18n
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"path"
 	"strings"
@@ -24,6 +25,7 @@ import (
 	"github.com/unknwon/i18n"
 	"golang.org/x/text/language"
 	"gopkg.in/macaron.v1"
+	"gopkg.in/macaron.v1/cookie"
 )
 
 // isFile returns true if given path is a file,
@@ -106,6 +108,8 @@ type Options struct {
 	Secure bool
 	// Set the HTTP Only flag on the `lang` cookie. Default is disabled.
 	CookieHttpOnly bool
+	// Set the SameSite flag on the `lang` cookie. Default is unset.
+	SameSite http.SameSite
 }
 
 func prepareOptions(options []Options) Options {
@@ -152,7 +156,9 @@ func prepareOptions(options []Options) Options {
 	if len(opt.TmplName) == 0 {
 		opt.TmplName = sec.Key("TMPL_NAME").MustString("i18n")
 	}
-
+	if opt.SameSite == 0 {
+		opt.SameSite = http.SameSite(sec.Key("SAME_SITE").MustInt())
+	}
 	return opt
 }
 
@@ -203,7 +209,7 @@ func I18n(options ...Options) macaron.Handler {
 
 		// Save language information in cookies.
 		if !hasCookie {
-			ctx.SetCookie("lang", curLang.Lang, 1<<31-1, "/"+strings.TrimPrefix(opt.SubURL, "/"), opt.CookieDomain, opt.Secure, opt.CookieHttpOnly)
+			ctx.SetCookie("lang", curLang.Lang, 1<<31-1, "/"+strings.TrimPrefix(opt.SubURL, "/"), opt.CookieDomain, opt.Secure, opt.CookieHttpOnly, cookie.SameSite(opt.SameSite))
 		}
 
 		restLangs := make([]LangType, 0, i18n.Count()-1)
